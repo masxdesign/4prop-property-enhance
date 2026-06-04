@@ -1,0 +1,20 @@
+{
+  "name": "@4prop/property-enhance",
+  "version": "1.0.0",
+  "description": "Isomorphic raw property → enhanced display object (property-pub-react parity)",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "he": "^1.2.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ]
+}
