@@ -431,6 +431,9 @@ export default function enhancePropertyData(
     for (const key of USER_CONTEXT_KEYS) {
       if (key in result) delete result[key];
     }
+    delete result.types;
+    delete result.subtypes;
+    result.content = { teaser: parsedContent.teaser ?? '' };
   }
 
   return result;

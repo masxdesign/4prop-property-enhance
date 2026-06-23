@@ -12,7 +12,7 @@ const enhanced = enhancePropertyData(
   propertyTypesCatalog,
   contentArray,      // optional [desc, location, amenities]
   companiesArray,      // raw negotiator/company rows
-  { omitUserContext: true }, // batch/precompute: no grade, enquiry, share fields
+  { omitUserContext: true }, // batch/precompute: no grade/enquiry/share; content is { teaser } only; no types[]/subtypes[]
 );
 ```
 

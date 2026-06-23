@@ -65,6 +65,10 @@ describe('enhancePropertyData', () => {
     assert.equal(enhanced.grade, undefined);
     assert.equal(enhanced.hasEnquiry, undefined);
     assert.equal(enhanced.isSharedContact, undefined);
+    assert.equal(enhanced.types, undefined);
+    assert.equal(enhanced.subtypes, undefined);
+    assert.deepEqual(enhanced.content, { teaser: '' });
+    assert.equal(enhanced.content.description, undefined);
   });
 
   it('parsePropertyAddressLine matches enhance addressText', () => {
