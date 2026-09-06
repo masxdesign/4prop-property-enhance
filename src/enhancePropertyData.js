@@ -3,6 +3,7 @@ import { number_format, formatCurrency } from './mathsUtils.js';
 import { determineTenureText } from './propertyNormalize.js';
 import { escapetext } from './escapetext.js';
 import { parsePropertyAddressLine } from './parsePropertyAddressLine.js';
+import { parsePropertyPictures } from './propertyPhotoUrls.js';
 
 const USER_CONTEXT_KEYS = [
   'grade',
@@ -128,7 +129,7 @@ export const parseContent = (property, contentArray = []) => {
  * @param {Array} propertyTypes
  * @param {Array} [contentArray]
  * @param {Array} [companiesArray]
- * @param {{ addressShowMore?: boolean, addressShowBuilding?: boolean, departments?: Array, omitUserContext?: boolean }} [settings]
+ * @param {{ addressShowMore?: boolean, addressShowBuilding?: boolean, departments?: Array, omitUserContext?: boolean, propertyPhotosBaseUrl?: string }} [settings]
  */
 export default function enhancePropertyData(
   originalProperty,
@@ -142,6 +143,7 @@ export default function enhancePropertyData(
   }
 
   const omitUserContext = Boolean(settings?.omitUserContext);
+  const propertyPhotosBaseUrl = settings?.propertyPhotosBaseUrl;
   const companiesPool = makeEnhancedCompanies(companiesArray);
   const departmentsByDid = new Map(
     (settings?.departments ?? []).map((d) => [String(d.did), d]),
@@ -283,30 +285,7 @@ export default function enhancePropertyData(
     }
   };
 
-  const parsePictures = (property) => {
-    if (!property || !property.images || typeof property.images !== 'string') {
-      return { count: 0, previews: [], thumbs: [], full: [], captions: [] };
-    }
-    try {
-      const { images } = property;
-      const output = [];
-      const captions = [];
-      images.split('*').forEach((image) => {
-        if (image !== '') {
-          const im = image.split('|');
-          if (im.length >= 6) {
-            const z = (x) => (im[1].includes('.') ? im[1] : `${x}.${im[1]}`);
-            output.push((x) => `https://www.4prop.com/JSON/NIDs/${im[5]}/${im[0] !== '' ? im[0] : im[3]}/${z(x)}`);
-            captions.push(im[2] || '');
-          }
-        }
-      });
-      const render = (x) => output.map((k) => k(x));
-      return { count: output.length, previews: render(3), thumbs: render('t'), full: render(0), captions };
-    } catch {
-      return { count: 0, previews: [], thumbs: [], full: [], captions: [] };
-    }
-  };
+  const parsePictures = (property) => parsePropertyPictures(property?.images, propertyPhotosBaseUrl);
 
   const parseCompanies = (property) => {
     if (!property || !Array.isArray(companiesPool)) return [];

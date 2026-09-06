@@ -74,6 +74,10 @@ const transformCompany = (company) => {
   return {
     cid: company.c,
     bid: company.b,
+    // The department behind `branch`/`department` below. Exposed so a consumer
+    // can scope a link to this office (/company/:cid?did=…) instead of the whole
+    // company — the backend already selects it as `d`.
+    did: company.d,
     branch: company.branch,
     department: company.department,
     logoThumb: logoUrls.thumb,

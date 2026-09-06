@@ -78,4 +78,17 @@ describe('enhancePropertyData', () => {
     });
     assert.equal(enhanced.addressText, line);
   });
+
+  it('uses propertyPhotosBaseUrl for picture URLs', () => {
+    const withImages = {
+      ...rawProperty,
+      images: 'name|t.jpg||id|thumb|storage123*',
+    };
+    const enhanced = enhancePropertyData(withImages, propertyTypes, [], [], {
+      omitUserContext: true,
+      propertyPhotosBaseUrl: 'https://each.co.uk',
+    });
+    assert.ok(enhanced.thumbnail.startsWith('https://each.co.uk/JSON/NIDs/'));
+    assert.ok(enhanced.pictures.previews[0].startsWith('https://each.co.uk/JSON/NIDs/'));
+  });
 });
