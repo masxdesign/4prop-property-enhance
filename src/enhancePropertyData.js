@@ -144,7 +144,9 @@ export default function enhancePropertyData(
 
   const omitUserContext = Boolean(settings?.omitUserContext);
   const propertyPhotosBaseUrl = settings?.propertyPhotosBaseUrl;
-  const companiesPool = makeEnhancedCompanies(companiesArray);
+  // Same base as the photos: company logos live on the SAME /JSON/NIDs share, so
+  // a deployment that needs an absolute host for one needs it for the other.
+  const companiesPool = makeEnhancedCompanies(companiesArray, propertyPhotosBaseUrl);
   const departmentsByDid = new Map(
     (settings?.departments ?? []).map((d) => [String(d.did), d]),
   );
@@ -197,7 +199,7 @@ export default function enhancePropertyData(
     if (!property || typeof property !== 'object') {
       return {
         rent: '', rentAlt: '', price: '', priceAlt: '', isSale: false, isRent: false,
-        isSaleRent: false, value: 0, text: 'Unknown', extended: {},
+        isSaleRent: false, value: 0, text: 'Unknown', extended: {}, labels: [],
       };
     }
     try {
@@ -265,6 +267,15 @@ export default function enhancePropertyData(
 
       const text = determineTenureText(property.tenure, property.rentperiod);
 
+      // One label per tenure flag set — the precise tenure (vs the coarse
+      // "for Sale"/"for Rent"), shown as badges on the price-led grid card.
+      const labels = [
+        isLease && 'Leasehold',
+        isShortLease && 'Short lease',
+        isFreehold && 'Freehold',
+        isLongLeaseHold && 'Long leasehold',
+      ].filter(Boolean);
+
       return {
         rent: formattedRent,
         rentAlt,
@@ -276,11 +287,12 @@ export default function enhancePropertyData(
         value: tenure,
         text,
         extended,
+        labels,
       };
     } catch {
       return {
         rent: '', rentAlt: '', price: '', priceAlt: '', isSale: false, isRent: false,
-        isSaleRent: false, value: 0, text: 'Unknown', extended: {},
+        isSaleRent: false, value: 0, text: 'Unknown', extended: {}, labels: [],
       };
     }
   };
@@ -385,6 +397,11 @@ export default function enhancePropertyData(
 
     latitude: latitude ? parseFloat(latitude) : null,
     longitude: longitude ? parseFloat(longitude) : null,
+
+    // "Listed on" sources for the price-led grid card: the property's last update
+    // (4prop_site) or the advert's schedule start (advertiser sites).
+    dateUpdated: originalProperty.dateupdated ?? null,
+    startDate: originalProperty.start_date ?? null,
 
     original: originalProperty,
   };
