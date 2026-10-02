@@ -32,7 +32,7 @@ const getCompanyLogoPath = (sourcePath, type = '', identifier = '', baseUrl = ''
   return (size) => `${baseUrl}/JSON/NIDs/DIDs/${domain}/${path}/${size}.${extension}`;
 };
 
-const getBrandLogoPaths = (company) => {
+const getBrandLogoPaths = (company, baseUrl = '') => {
   if (!company) return null;
 
   const brandTypes = [
@@ -52,7 +52,14 @@ const getBrandLogoPaths = (company) => {
     company[key],
     sizeIndex,
     company[domainKey],
-    'https://www.4prop.com',
+    // DEFAULTS to relative (same-origin): property-pub serves /JSON/NIDs on every
+    // advertiser host, so logos load from whatever host the page is on rather
+    // than pinning every advertiser site to www.4prop.com being reachable.
+    //
+    // Overridable because logos live on the SAME share as property photos — a
+    // deployment where that share is absent (local dev has no `json` mount) must
+    // be able to point both at an absolute host, or logos 404 while photos load.
+    baseUrl,
   );
 
   if (!logoPathGenerator) {
@@ -66,10 +73,10 @@ const getBrandLogoPaths = (company) => {
   };
 };
 
-const transformCompany = (company) => {
+const transformCompany = (company, baseUrl = '') => {
   if (!company) return null;
 
-  const logoUrls = getBrandLogoPaths(company);
+  const logoUrls = getBrandLogoPaths(company, baseUrl);
 
   return {
     cid: company.c,
@@ -89,12 +96,20 @@ const transformCompany = (company) => {
   };
 };
 
-export default function makeEnhancedCompanies(input) {
+/**
+ * @param {object|object[]} input
+ * @param {string} [baseUrl]  host for the /JSON/NIDs logo URLs. Empty (default)
+ *   means RELATIVE/same-origin. See getBrandLogoPaths for why this is overridable.
+ */
+export default function makeEnhancedCompanies(input, baseUrl = '') {
   if (!input) return null;
 
   if (Array.isArray(input)) {
-    return input.map(transformCompany).filter(Boolean);
+    // Arrow, not a bare reference: `map` passes (item, INDEX, array), so
+    // `.map(transformCompany)` would hand the index in as baseUrl and every logo
+    // URL after the first would be prefixed with a number.
+    return input.map((company) => transformCompany(company, baseUrl)).filter(Boolean);
   }
 
-  return transformCompany(input);
+  return transformCompany(input, baseUrl);
 }

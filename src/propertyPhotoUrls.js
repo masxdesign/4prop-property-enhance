@@ -1,7 +1,17 @@
 export const DEFAULT_PROPERTY_PHOTOS_BASE_URL = 'https://www.4prop.com';
 
-/** Strip trailing slashes; fall back to the production 4prop host when unset. */
+/**
+ * Strip trailing slashes; fall back to the production 4prop host when unset.
+ *
+ * `null`/`undefined` means "not configured" -> the 4prop default, which keeps every
+ * existing caller working. An explicit EMPTY STRING is different: it means
+ * "same-origin, emit a RELATIVE /JSON/... URL", which is what property-pub's SPA
+ * asks for now that property-pub serves /JSON/NIDs on every advertiser host. Without
+ * that distinction there is no way to request relative URLs at all — empty collapsed
+ * back to the absolute 4prop host.
+ */
 export function normalizePropertyPhotosBaseUrl(baseUrl) {
+  if (baseUrl === '') return '';
   const raw = (baseUrl ?? '').trim();
   if (!raw) return DEFAULT_PROPERTY_PHOTOS_BASE_URL;
   return raw.replace(/\/+$/, '');

@@ -204,10 +204,15 @@ export default function enhancePropertyData(
     }
     try {
       const {
-        tenure = 0, price = 0, rent = 0, rentperiod = '1',
+        tenure = 0, price = 0, rent = 0, rentperiod: rawRentPeriod = '1',
         minintsqft = 0, maxintsqft = 0, pricemin = 0, pricemax = 0, rentmin = 0, rentmax = 0,
       } = property;
       const period = { '-1': '/sqft', '-2': '/sqm', '1': 'pa', '2': 'monthly', '4': 'weekly' };
+      // STRING, always. The DB column is an int, so the agentb/SSR rows carry -1 /
+      // 1 / 2 / 4 as NUMBERS, and every string comparison below silently failed:
+      // per-sqft rents were treated as annual (rentAlt "£1 /sqft" instead of the
+      // annual figure) and monthly/weekly rents were never annualised.
+      const rentperiod = String(rawRentPeriod ?? '1');
 
       const isRent = (tenure & 3) > 0;
       const isSale = (tenure & 12) > 0;
