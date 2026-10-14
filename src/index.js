@@ -1,4 +1,4 @@
-export { default as enhancePropertyData, parseContent } from './enhancePropertyData.js';
+export { default as enhancePropertyData, parseContent, PROPERTY_STATUS_NAMES } from './enhancePropertyData.js';
 export {
   DEFAULT_PROPERTY_PHOTOS_BASE_URL,
   normalizePropertyPhotosBaseUrl,

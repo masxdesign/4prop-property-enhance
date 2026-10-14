@@ -77,7 +77,7 @@ const dsm = (a, op, b) => {
   return 0;
 };
 
-const PROPERTY_STATUS_NAMES = {
+export const PROPERTY_STATUS_NAMES = {
   0: 'Available',
   1: 'Under Offer',
   2: 'Withdrawn',
