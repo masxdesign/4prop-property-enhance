@@ -6,6 +6,7 @@ import { parsePropertyAddressLine } from './parsePropertyAddressLine.js';
 import { parsePropertyPictures } from './propertyPhotoUrls.js';
 import { buildPropertyHeadline } from './buildPropertyHeadline.js';
 import { singularSubtypeLabel } from './subtypeSingularLabels.js';
+import { parseFloors } from './parseFloors.js';
 
 const USER_CONTEXT_KEYS = [
   'grade',
@@ -390,6 +391,8 @@ export default function enhancePropertyData(
 
     title,
     headline,
+    // Floors table on the detail page (parseFloors.js): null when none are on offer.
+    floors: parseFloors(originalProperty.floors),
 
     typesText,
     subtypesText,

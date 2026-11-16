@@ -12,6 +12,7 @@ export { parsePropertyAddressLine, PROPERTY_ADDRESS_UNAVAILABLE } from './parseP
 export { escapetext, decodeLegacyPropertyText } from './escapetext.js';
 export { buildPropertyHeadline, postcodeDistrict, propertyHeadline } from './buildPropertyHeadline.js';
 export { SUBTYPE_SINGULAR_LABELS, singularSubtypeLabel } from './subtypeSingularLabels.js';
+export { parseFloors, floorAvailableText } from './parseFloors.js';
 export { number_format, formatCurrency } from './mathsUtils.js';
 export {
   determineTenureText,
