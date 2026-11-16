@@ -1,9 +1,10 @@
 import makeEnhancedCompanies from './makeEnhancedCompanies.js';
 import { number_format, formatCurrency } from './mathsUtils.js';
 import { determineTenureText } from './propertyNormalize.js';
-import { escapetext } from './escapetext.js';
+import { escapetext, decodeLegacyPropertyText } from './escapetext.js';
 import { parsePropertyAddressLine } from './parsePropertyAddressLine.js';
 import { parsePropertyPictures } from './propertyPhotoUrls.js';
+import { buildPropertyHeadline } from './buildPropertyHeadline.js';
 
 const USER_CONTEXT_KEYS = [
   'grade',
@@ -354,6 +355,16 @@ export default function enhancePropertyData(
 
   const tenureText = displayTenure(parsedTenure);
   const title = `${typesText} ${parsedTenure.text || ''} in ${parsedAddress}`;
+  // The detail page's heading ("Warehouse for sale in London, N11"), the same on
+  // the SPA, property-pub SSR and 4prop PHP (which reads this field).
+  const headline = buildPropertyHeadline({
+    typeLabel: parsedTypes.subtypes[0]?.label || parsedTypes.types[0]?.label,
+    isSale: parsedTenure.isSale,
+    isRent: parsedTenure.isRent,
+    place: decodeLegacyPropertyText(originalProperty.suburblocality)
+      || decodeLegacyPropertyText(originalProperty.towncity) || '',
+    postcode: originalProperty.matchpostcode,
+  });
 
   const { status, dealswith = '', latitude, longitude } = originalProperty;
   const dealingAgents = [...new Set(String(dealswith).trim(',').split(',').filter(Boolean))];
@@ -377,6 +388,7 @@ export default function enhancePropertyData(
     key: originalProperty.pid,
 
     title,
+    headline,
 
     typesText,
     subtypesText,
