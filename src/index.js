@@ -11,6 +11,7 @@ export { default as makeEnhancedCompanies } from './makeEnhancedCompanies.js';
 export { parsePropertyAddressLine, PROPERTY_ADDRESS_UNAVAILABLE } from './parsePropertyAddressLine.js';
 export { escapetext, decodeLegacyPropertyText } from './escapetext.js';
 export { buildPropertyHeadline, postcodeDistrict, propertyHeadline } from './buildPropertyHeadline.js';
+export { SUBTYPE_SINGULAR_LABELS, singularSubtypeLabel } from './subtypeSingularLabels.js';
 export { number_format, formatCurrency } from './mathsUtils.js';
 export {
   determineTenureText,

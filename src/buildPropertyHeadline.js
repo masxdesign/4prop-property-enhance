@@ -1,4 +1,5 @@
 import { decodeLegacyPropertyText } from './escapetext.js';
+import { singularSubtypeLabel } from './subtypeSingularLabels.js';
 
 /**
  * The property detail page's HEADING: what it is, for sale or rent, and roughly
@@ -11,7 +12,9 @@ import { decodeLegacyPropertyText } from './escapetext.js';
  *   Office in Peckham, SE15            ← for sale AND rent: the tenure is left out
  *
  * - WHAT: the first subtype ("Warehouse"), else the first type ("Industrial"),
- *   else "Property". One label, never a list: a property tagged with four types
+ *   else "Property". The subtype is SINGULAR ("Shop", not the catalog's "Shops"),
+ *   from subtypeSingularLabels.js: a new subtype in 4prop's subtypes.json needs
+ *   its line there. One label, never a list: a property tagged with four types
  *   would otherwise produce a sentence, not a heading.
  * - TENURE: "for sale" / "for rent" only when it is one or the other.
  * - WHERE: the locality (suburb) if there is one, else the town, then the postcode
@@ -50,7 +53,7 @@ export function propertyHeadline(property) {
   if (property.headline) return property.headline;
   const original = property.original || {};
   return buildPropertyHeadline({
-    typeLabel: property.subtypes?.[0]?.label || property.types?.[0]?.label || property.firstSubtype,
+    typeLabel: singularSubtypeLabel(property.subtypes?.[0]) || property.types?.[0]?.label || property.firstSubtype,
     isSale: Boolean(property.tenure?.isSale),
     isRent: Boolean(property.tenure?.isRent),
     place: decodeLegacyPropertyText(original.suburblocality) || decodeLegacyPropertyText(original.towncity) || '',
