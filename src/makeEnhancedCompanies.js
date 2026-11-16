@@ -76,10 +76,17 @@ const getBrandLogoPaths = (company, baseUrl = '') => {
 const transformCompany = (company, baseUrl = '') => {
   if (!company) return null;
 
-  const logoUrls = getBrandLogoPaths(company, baseUrl);
+  // A row with a ready-made `logo_url` (the advertiser standing in for a hidden
+  // agency, property-pub services/hideIdentity.js) bypasses the /JSON/NIDs paths.
+  const logoUrls = company.logo_url
+    ? { thumb: company.logo_url, default: company.logo_url, original: company.logo_url }
+    : getBrandLogoPaths(company, baseUrl);
 
   return {
     cid: company.c,
+    // The site itself shown as the dealing company (agents hidden in EACH): no
+    // company page to link to, no branch / phone.
+    siteOwner: Boolean(company.site_owner),
     bid: company.b,
     // The department behind `branch`/`department` below. Exposed so a consumer
     // can scope a link to this office (/company/:cid?did=…) instead of the whole

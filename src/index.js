@@ -13,6 +13,23 @@ export { escapetext, decodeLegacyPropertyText } from './escapetext.js';
 export { buildPropertyHeadline, postcodeDistrict, propertyHeadline } from './buildPropertyHeadline.js';
 export { SUBTYPE_SINGULAR_LABELS, singularSubtypeLabel } from './subtypeSingularLabels.js';
 export { parseFloors, floorAvailableText } from './parseFloors.js';
+export {
+  HIDE_IDENTITY_BITS,
+  HIDE_IDENTITY_ALL,
+  DEFAULT_HIDE_IDENTITY_MASK,
+  normaliseHideIdentityMask,
+  effectiveSiteMask,
+  hiddenParts,
+  siteOwnerCid,
+  HIDDEN_ADDRESS_COORD_DP,
+  buildHideContext,
+  needsViewerOrg,
+  isOwnListing,
+  maskPropertyRow,
+  maskPropertyRows,
+  siteOwnerCompanyRow,
+  pruneCompanies,
+} from './hideIdentity.js';
 export { number_format, formatCurrency } from './mathsUtils.js';
 export {
   determineTenureText,

@@ -327,6 +327,9 @@ export default function enhancePropertyData(
       return companiesPool
         .filter((c) => c && String(cids).includes(`,${c.cid},`))
         .map((c) => {
+          // Matched by its placeholder cid; carries none from here on, so nothing
+          // links it to a /company page.
+          if (c.siteOwner) return { ...c, cid: null };
           const own = ownDeptByCid.get(String(c.cid));
           if (!own) return c;
           return { ...c, branch: own.branch ?? c.branch, department: own.department ?? c.department };
