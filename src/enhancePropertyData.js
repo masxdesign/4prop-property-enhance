@@ -7,6 +7,7 @@ import { parsePropertyPictures } from './propertyPhotoUrls.js';
 import { buildPropertyHeadline } from './buildPropertyHeadline.js';
 import { singularSubtypeLabel } from './subtypeSingularLabels.js';
 import { parseFloors } from './parseFloors.js';
+import { parseAuction } from './parseAuction.js';
 
 const USER_CONTEXT_KEYS = [
   'grade',
@@ -396,6 +397,9 @@ export default function enhancePropertyData(
     headline,
     // Floors table on the detail page (parseFloors.js): null when none are on offer.
     floors: parseFloors(originalProperty.floors),
+    // Auction date (EACH info2, parseAuction.js): null, or { date, dateText, upcoming,
+    // daysLeft, whenText }. Detail page only: the listing selects don't fetch info2.
+    auction: parseAuction(originalProperty.info2),
 
     typesText,
     subtypesText,

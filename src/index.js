@@ -13,6 +13,7 @@ export { escapetext, decodeLegacyPropertyText } from './escapetext.js';
 export { buildPropertyHeadline, postcodeDistrict, propertyHeadline } from './buildPropertyHeadline.js';
 export { SUBTYPE_SINGULAR_LABELS, singularSubtypeLabel } from './subtypeSingularLabels.js';
 export { parseFloors, floorAvailableText } from './parseFloors.js';
+export { parseAuction } from './parseAuction.js';
 export {
   HIDE_IDENTITY_BITS,
   HIDE_IDENTITY_ALL,
