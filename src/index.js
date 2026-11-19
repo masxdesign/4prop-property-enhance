@@ -39,5 +39,7 @@ export {
   validatePropertyData,
 } from './propertyNormalize.js';
 
+export { parseAttachments } from './parseAttachments.js';
+
 import enhancePropertyData from './enhancePropertyData.js';
 export default enhancePropertyData;
