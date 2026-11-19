@@ -400,6 +400,12 @@ export default function enhancePropertyData(
     // Auction date (EACH info2, parseAuction.js): null, or { date, dateText, upcoming,
     // daysLeft, whenText }. Detail page only: the listing selects don't fetch info2.
     auction: parseAuction(originalProperty.info2),
+    // The agent's files, already decoded by property-pub and sent only to viewers allowed
+    // them (services/propertyAttachments.js): [{ label, url, ext, sizeKb }], or null.
+    attachments: Array.isArray(originalProperty.attachments) ? originalProperty.attachments : null,
+    // How many files the property has (everyone; detail page only), null when unknown
+    // (listings don't send it): the enquiry form's PDF brochure and the Brochure pack key fact.
+    attachmentCount: Number.isFinite(originalProperty.attachment_count) ? originalProperty.attachment_count : null,
 
     typesText,
     subtypesText,
